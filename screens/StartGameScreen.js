@@ -21,13 +21,14 @@ function StartGameScreen(props){
         const chosenNumber = parseInt(enteredNumber);
 
         //isNaN isNotANumber
-        if (isNaN(chosenNumber) || chosenNumber <= 0 || chosenNumber > 99 ) {
-            //first is title, then message, then configure buttons
-            Alert.alert('Invalid Number!',
-                'Number has to be a number between 1 and 99',
-            [{text: 'Okay', style: 'destructive', onPress: resetInputHandler}])
+        if (isNaN(chosenNumber) || chosenNumber <= 0 || chosenNumber > 99) {
+            Alert.alert(
+              'Invalid number!',
+              'Number has to be a number between 1 and 99.',
+              [{ text: 'Okay', style: 'destructive', onPress: resetInputHandler }]
+            );
             return;
-        }
+          }
         
         props.onPickNumber(chosenNumber);
     }

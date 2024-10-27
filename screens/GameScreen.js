@@ -8,7 +8,6 @@ import InstructionText from '../components/ui/InstructionText.js';
 //can get icons and other expo special modules
 import { Ionicons } from '@expo/vector-icons';
 import GuessLogItem from '../components/game/GuessLogItem.js';
-import { useRef } from 'react';
 
 function generateRandomBetween(min, max, exclude) {
     const rndNum = Math.floor(Math.random() * (max - min)) + min;
@@ -24,9 +23,7 @@ let minBoundary = 1;
 let maxBoundary = 100;
 
 function GameScreen({userNumber, onGameOver}){
-  const minBoundary = useRef(1);
-  const maxBoundary = useRef(100);
-  const initialGuess = generateRandomBetween(minBoundary,maxBoundary, userNumber );
+  const initialGuess = generateRandomBetween(1,100, userNumber );
   const [currentGuess, setCurrentGuess] = useState(initialGuess);
   const [guessRounds, setGuessRounds] = useState([initialGuess]);
   
@@ -39,34 +36,37 @@ function GameScreen({userNumber, onGameOver}){
   }, [currentGuess,userNumber, onGameOver]);
 
   useEffect(() => {
-    minBoundary.current = 1;
-    maxBoundary.current = 100;
+    minBoundary = 1;
+    maxBoundary = 100;
   }, [])
 
   function nextGuessHandler(direction) {
-    if ((direction === 'lower' && currentGuess < userNumber) || 
-    (direction === 'greater' && currentGuess > userNumber)){
-      Alert.alert("Don't lie!", "You know that this is wrong...",
-        [{text: 'Sorry!', style: 'cancel'},]);
-        return;
+    // direction => 'lower', 'greater'
+    if (
+      (direction === 'lower' && currentGuess < userNumber) ||
+      (direction === 'greater' && currentGuess > userNumber)
+    ) {
+      Alert.alert("Don't lie!", 'You know that this is wrong...', [
+        { text: 'Sorry!', style: 'cancel' },
+      ]);
+      return;
     }
 
     if (direction === 'lower'){
-      maxBoundary.current = currentGuess;
+      maxBoundary = currentGuess;
     }else {
-      minBoundary.current = currentGuess + 1;
+      minBoundary = currentGuess + 1;
     }
     const newRndNumber = generateRandomBetween(minBoundary.current,maxBoundary.current,currentGuess);
     setCurrentGuess(newRndNumber);
-    setGuessRounds(prevGuessRounds => {
-      [newRndNumber, ...prevGuessRounds]
-    });
-  }
+    setGuessRounds((prevGuessRounds) =>
+      [newRndNumber, ...prevGuessRounds]);
+    }
 
 
-  const guessRoundsListLength = guessRounds.length;
+   const guessRoundsListLength = guessRounds.length;
 
-   return (
+  return (
        <View style={styles.screen}>
           <Title>Opponent's Guess</Title>
           <NumberContainer>{currentGuess}</NumberContainer>
@@ -82,8 +82,12 @@ function GameScreen({userNumber, onGameOver}){
               </View>
             </Card>
               <View style={styles.listContainer}>
-                <FlatList data={guessRounds}  renderItem={(itemData) => 
-                  <GuessLogItem roundNumber={guessRoundsListLength - itemData.index} guess={itemData.item} />}
+                <FlatList 
+                data={guessRounds}  
+                renderItem={(itemData) => (
+                  <GuessLogItem 
+                  roundNumber={guessRoundsListLength - itemData.index} 
+                  guess={itemData.item} />)}
                   keyExtractor={(item) => item} />
               </View>
        </View>

@@ -6,8 +6,9 @@ import PrimaryButton from "../components/ui/PrimaryButton.js";
 function GameOverScreen({roundsNumber, userNumber, onStartNewGame}) {
     return (
         <View style={styles.rootContainer}>
-        <View style={styles.imageContainer}>
             <Title>GAME OVER</Title>
+        <View style={styles.imageContainer}>
+            
             <Image style={styles.image} source={require('../assets/images/success.png')}/>
         </View>
         <Text style={styles.summaryText}>Your phone needed <Text style={styles.highlight}>{roundsNumber}</Text> rounds to guess the number <Text style={styles.highlight}>{userNumber}</Text>.</Text>
